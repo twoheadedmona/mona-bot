@@ -5,10 +5,15 @@ from discord.ext.commands import Bot
 from discord.ext import commands
 import platform
 import random
+import safygiphy
+import requests
+import io
 
 # Here you can modify the bot's prefix and description and wether it sends help in direct messages or not.
 client = Bot(description="Basic Bot",
              command_prefix="!", pm_help=True)
+
+giphy = safygiphy.Giphy()
 
 # This is what happens everytime the bot launches. In this case, it prints information like server count, user count the bot is connected to, and the bot id in the console.
 # Do not mess with it because the bot can break, if you wish to do so, please consult me or someone trusted.
@@ -83,6 +88,24 @@ async def on_message(message):
                 description = "And make sure you use **?**",
                 color = 0x0099ff
             ))
+    
+    if message.content.startswith("!coin"):
+        choice = random.randint(1,2)
+        if choice == 1:
+            await client.add_reaction(message, "\U000026AA")
+        else:
+            await client.add_reaction(message, "\U000026AB")
+
+            
+    if message.content.startswith("!gif"):
+        gif_tag = message.content.replace("!gif", "").lstrip().rstrip()
+        rgif = giphy.random(tag = str(gif_tag))
+        response = requests.get(
+            str(rgif.get("data", {}).get('image_original_url')), stream=True
+        )
+        await client.send_file(message.channel, io.BytesIO(response.raw.read()), filename='video.gif')
+
+            
 
 
 @client.event
