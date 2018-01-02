@@ -147,7 +147,7 @@ async def on_member_join(member):
 #         pass
 
 
-client.run('MzkwMTQ4MTU2NjQzNjA2NTQ5.DRJ9kA.XeXwoR8FdY2fQnJoq12qCK_90iI')
+client.run('TOKEN')
 
 # The help command is currently set to be Direct Messaged.
 # If you would like to change that, change "pm_help = True" to "pm_help = False" on line 9.
