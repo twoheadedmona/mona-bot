@@ -105,15 +105,24 @@ async def on_message(message):
         )
         await client.send_file(message.channel, io.BytesIO(response.raw.read()), filename='video.gif')
 
-    if message.content.startswith('!play '):
+    if message.content.startswith('!play'):
 
         # yt_url = message.content[6:]
+        link = message.content.replace("!play", "").lstrip().rstrip()
         channel = message.author.voice.voice_channel
         voice = await client.join_voice_channel(channel)
-        player = await voice.create_ytdl_player("https://www.youtube.com/watch?v=MAzp5fMJTtk")
-        # players[message.server.id] = player
+        player = await voice.create_ytdl_player(link)
+        players[message.server.id] = player
         player.start()
 
+    if message.content.startswith('!quit'):
+        try:
+            voice_client = client.voice_client_in(message.server)
+            await voice_client.disconnect()
+        except AttributeError:
+            await client.send_message(message.channel, "no.")
+        except Exception as Hugo:
+            await client.send_message(message.channel, "Ein Error: ```{haus}```".format(haus=Hugo))
             
 
 
@@ -156,7 +165,6 @@ async def on_member_join(member):
 #         pass
 
 
-client.run('TOKEN')
 
 # The help command is currently set to be Direct Messaged.
 # If you would like to change that, change "pm_help = True" to "pm_help = False" on line 9.
