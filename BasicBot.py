@@ -14,7 +14,7 @@ client = Bot(description="Basic Bot",
              command_prefix="!", pm_help=True)
 
 giphy = safygiphy.Giphy()
-
+players = {}
 # This is what happens everytime the bot launches. In this case, it prints information like server count, user count the bot is connected to, and the bot id in the console.
 # Do not mess with it because the bot can break, if you wish to do so, please consult me or someone trusted.
 
@@ -104,6 +104,15 @@ async def on_message(message):
             str(rgif.get("data", {}).get('image_original_url')), stream=True
         )
         await client.send_file(message.channel, io.BytesIO(response.raw.read()), filename='video.gif')
+
+    if message.content.startswith('!play '):
+
+        # yt_url = message.content[6:]
+        channel = message.author.voice.voice_channel
+        voice = await client.join_voice_channel(channel)
+        player = await voice.create_ytdl_player("https://www.youtube.com/watch?v=MAzp5fMJTtk")
+        # players[message.server.id] = player
+        player.start()
 
             
 
